@@ -81,6 +81,7 @@
 #include "parasite-syscall.h"
 #include "files-reg.h"
 #include "syscall-codes.h"
+#include "files-reg.h"
 
 #include "protobuf.h"
 #include "images/sa.pb-c.h"
