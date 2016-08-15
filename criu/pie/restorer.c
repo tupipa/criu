@@ -505,9 +505,6 @@ static long restore_self_exe_late(struct task_restore_args *args)
 {
 	int fd = args->fd_exe_link, ret;
 
-	if (fd == -1)
-		return 0;
-
 	pr_info("Restoring EXE link\n");
 	ret = sys_prctl_safe(PR_SET_MM, PR_SET_MM_EXE_FILE, fd, 0);
 	if (ret)
@@ -1353,10 +1350,8 @@ long __export_restore_task(struct task_restore_args *args)
 		 * new ones from image file.
 		 */
 		ret |= restore_self_exe_late(args);
-	} else {
-		if (args->fd_exe_link != -1)
-			sys_close(args->fd_exe_link);
-	}
+	} else
+		sys_close(args->fd_exe_link);
 
 	if (ret)
 		goto core_restore_end;
