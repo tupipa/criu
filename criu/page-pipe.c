@@ -127,7 +127,7 @@ static int page_pipe_grow(struct page_pipe *pp, unsigned int flags)
 		return -1;
 
 out:
-	if (pp->compat_iov)
+	if (pp->flags & PP_COMPAT)
 		free_iov = (void*)&((struct iovec_compat*)pp->iovs)[pp->free_iov];
 	else
 		free_iov = &pp->iovs[pp->free_iov];
@@ -154,8 +154,6 @@ struct page_pipe *create_page_pipe(unsigned int nr_segs, struct iovec *iovs, uns
 			goto err_free_pp;
 
 		pp->flags |= PP_OWN_IOVS;
-		if (page_pipe_grow(pp, 0))
-			return NULL;
 	}
 
 	pp->nr_pipes = 0;
@@ -169,7 +167,7 @@ struct page_pipe *create_page_pipe(unsigned int nr_segs, struct iovec *iovs, uns
 	pp->free_hole = 0;
 	pp->holes = NULL;
 
-	if (page_pipe_grow(pp))
+	if (page_pipe_grow(pp, 0))
 		goto err_free_iovs;
 
 	return pp;

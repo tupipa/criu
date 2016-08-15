@@ -392,7 +392,7 @@ static int dump_holes(struct page_xfer *xfer, struct page_pipe *pp,
 
 	for (; *cur_hole < pp->free_hole ; (*cur_hole)++) {
 		struct iovec hole = get_iov(pp->holes, *cur_hole,
-						pp->flag & PP_COMPAT);
+						pp->flags & PP_COMPAT);
 		int hole_type = get_hole_type(pp, *cur_hole);
 
 		if (limit && hole.iov_base >= limit)
@@ -421,7 +421,7 @@ int page_xfer_dump_pages(struct page_xfer *xfer, struct page_pipe *pp,
 		pr_debug("\tbuf %d/%d\n", ppb->pages_in, ppb->nr_segs);
 
 		for (i = 0; i < ppb->nr_segs; i++) {
-			struct iovec iov = get_iov(ppb->iov, i, pp->flag & PP_COMPAT);
+			struct iovec iov = get_iov(ppb->iov, i, pp->flags & PP_COMPAT);
 
 			ret = dump_holes(xfer, pp, &cur_hole, iov.iov_base, off);
 			if (ret)
